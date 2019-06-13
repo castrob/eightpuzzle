@@ -6,9 +6,11 @@ import java.util.Objects;
   * @date: 09/06/2017
   */
 
-class Puzzle {
+class Puzzle implements Comparable<Puzzle> {
 	String puzzle;
 	Boolean isValidPuzzle;
+	int level = 0;
+	int h;
 
 	/**
 	  * Standard Constructor
@@ -17,7 +19,7 @@ class Puzzle {
 	  * isValidPuzzle = false
 	  */
 	public Puzzle(){
-		this.puzzle = "000000000";
+		this.puzzle = "000000000";	
 		this.isValidPuzzle = false;
 	}
 
@@ -104,6 +106,7 @@ class Puzzle {
 
 	public Puzzle[] getPuzzleStates (Puzzle p){
 		int zeroPos = 0;
+		int nextLevel = p.level + 1;
 		Puzzle[] states = new Puzzle[0];
 		if (p.validPuzzle(p)){
 			// get the position of 0 to determinate the number of states
@@ -114,17 +117,24 @@ class Puzzle {
 				 states = new Puzzle[2];
 				 states[0] = p.swapElements(0,1);
 				 states[1] = p.swapElements(0,3);
+				 states[0].level = nextLevel;
+				 states[1].level = nextLevel;
 				break;
 				case 1: 
 				 states = new Puzzle[3];
 				 states[0] = p.swapElements(1,0);
 				 states[1] = p.swapElements(1,2);
 				 states[2] = p.swapElements(1,4);
+				 states[0].level = nextLevel;
+				 states[1].level = nextLevel;
+				 states[2].level = nextLevel;
 				break;
 				case 2: 
 				 states = new Puzzle[2];
 				 states[0] = p.swapElements(2,1);
 				 states[1] = p.swapElements(2,5);
+				 states[0].level = nextLevel;
+				 states[1].level = nextLevel;
 				break;
 				case 3: 
 				 states = new Puzzle[3];
@@ -138,28 +148,42 @@ class Puzzle {
 				 states[1] = p.swapElements(4,3);
 				 states[2] = p.swapElements(4,5);
 				 states[3] = p.swapElements(4,7);
+				 states[0].level = nextLevel;
+				 states[1].level = nextLevel;
+				 states[2].level = nextLevel;
+				 states[3].level = nextLevel;
 				break;
 				case 5: 
 				 states = new Puzzle[3];
 				 states[0] = p.swapElements(5,2);
 				 states[1] = p.swapElements(5,4);
 				 states[2] = p.swapElements(5,8);
+				 states[0].level = nextLevel;
+				 states[1].level = nextLevel;
+				 states[2].level = nextLevel;
 				break;
 				case 6:
 				 states = new Puzzle[2];
 				 states[0] = p.swapElements(6,3);
 				 states[1] = p.swapElements(6,7);
+				 states[0].level = nextLevel;
+				 states[1].level = nextLevel;
 				break;
 				case 7: 
 				 states = new Puzzle[3];
 				 states[0] = p.swapElements(7,4);
 				 states[1] = p.swapElements(7,6);
-				 states[2] = p.swapElements(7,8);				
+				 states[2] = p.swapElements(7,8);
+				 states[0].level = nextLevel;
+				 states[1].level = nextLevel;
+				 states[2].level = nextLevel;				
 				break;
 				case 8: 
 				 states = new Puzzle[2];
 				 states[0] = p.swapElements(8,7);
 				 states[1] = p.swapElements(8,5);
+				 states[0].level = nextLevel;
+				 states[1].level = nextLevel;
 				break;
 			}
 		}		
@@ -184,32 +208,29 @@ class Puzzle {
 		return answer;
 	}
 
-	public static void main (String[]args){
-		Puzzle p = new Puzzle("123405786");
-		//Puzzle d = p.swapElements(0,1);
-		System.out.println(p);
-		System.out.println();
-		System.out.println();
-		Puzzle[] tmp = p.getPuzzleStates(p);
-		for ( Puzzle e : tmp )
-			if(e.validPuzzle(e)) System.out.println(e);
-		// System.out.println(p);
-		// System.out.println();
-		// System.out.println();
-		// System.out.println(d);
+
+	/**
+	 * Heuristic used to AStar implementation
+	 * @return Manhattam Distance from this Puzzle to the Solution Puzzle
+	 */
+	public int heuristic(){
+		int value = 0;
+		String solution = "123456780";
+		for(int i = 0; i < this.puzzle.length(); i++){
+			if(solution.charAt(i) != this.puzzle.charAt(i) && this.puzzle.charAt(i) != '0')
+				value++;
+		}
+		return value;
 	}
 
+	public int getFScore(){
+		return this.level + this.heuristic();
+	}
+	
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Puzzle puzzle1 = (Puzzle) o;
-		return puzzle.equals(puzzle1.puzzle) &&
-				Objects.equals(isValidPuzzle, puzzle1.isValidPuzzle);
+	public int compareTo(Puzzle p) {
+		return this.getFScore() - p.getFScore();
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(puzzle);
-	}
+
 }
