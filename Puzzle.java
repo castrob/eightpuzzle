@@ -216,9 +216,14 @@ class Puzzle implements Comparable<Puzzle> {
 	public int heuristic(){
 		int value = 0;
 		String solution = "123456780";
-		for(int i = 0; i < this.puzzle.length(); i++){
-			if(solution.charAt(i) != this.puzzle.charAt(i) && this.puzzle.charAt(i) != '0')
-				value++;
+		for(int i = 0; i < this.puzzle.length(); i++) {
+			int index1 = this.puzzle.indexOf("" + i);
+			int index2 = solution.indexOf("" + i);
+			int x1 = index1 / 3;
+			int y1 = index1 % 3;
+			int x2 = index2 / 3;
+			int y2 = index2 % 3;
+			value += Math.abs(x1 - x2) + Math.abs(y1 - y2);
 		}
 		return value;
 	}

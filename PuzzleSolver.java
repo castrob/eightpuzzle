@@ -80,22 +80,25 @@ class PuzzleSolver {
 	}
 
 	public List<Puzzle> AStar(Puzzle p) throws Exception {
-		List<Puzzle> open = new ArrayList<>();
+		Queue<Puzzle> open = new PriorityQueue<>();
 		List<Puzzle> closed = new ArrayList<>();
+		Set<Puzzle> alreadyVisited = new HashSet<>();
 
 		open.add(p);
+		alreadyVisited.add(p);
 		while (!open.isEmpty()) {
-			Puzzle puzzle = open.remove(0);
+			Puzzle puzzle = open.remove();
 			closed.add(puzzle);
 			if (puzzle.heuristic() == 0) { // Encontramos a Solução do Puzzle
 				break;
 			}
 			Puzzle[] states = puzzle.getPuzzleStates(puzzle);
 			for (Puzzle state : states) {
-				open.add(state);
+				if (!alreadyVisited.contains(state)) {
+					open.add(state);
+					alreadyVisited.add(state);
+				}
 			}
-			Collections.sort(open);
-			System.out.println(open);
 		}
 		return closed;
 	}
@@ -124,9 +127,11 @@ class PuzzleSolver {
 				p = new Puzzle(puzzleString);
 				if (p.isValidPuzzle) {
 					List<Puzzle> puzzles = solver.BFS(p);
-					for (Puzzle puzzle : puzzles) {
-						System.out.println(puzzle);
-					}
+					System.out.println(puzzles.size());
+
+//					for (Puzzle puzzle : puzzles) {
+//						System.out.println(puzzle);
+//					}
 				} else {
 					System.out.println("Puzzle Impossivel !");
 				}
@@ -137,9 +142,11 @@ class PuzzleSolver {
 				p = new Puzzle(puzzleString);
 				if (p.isValidPuzzle) {
 					List<Puzzle> puzzles = solver.DFS(p);
-					for (Puzzle puzzle : puzzles) {
-						System.out.println(puzzle);
-					}
+					System.out.println(puzzles.size());
+
+//					for (Puzzle puzzle : puzzles) {
+//						System.out.println(puzzle);
+//					}
 				} else {
 					System.out.println("Puzzle Impossivel !");
 				}
@@ -150,9 +157,10 @@ class PuzzleSolver {
 				p = new Puzzle(puzzleString);
 				if (p.isValidPuzzle) {
 					List<Puzzle> puzzles = solver.AStar(p);
-					for (Puzzle puzzle : puzzles) {
-						System.out.println(puzzle);
-					}
+					System.out.println(puzzles.size());
+//					for (Puzzle puzzle : puzzles) {
+//						System.out.println(puzzle);
+//					}
 				} else {
 					System.out.println("Puzzle Impossivel !");
 				}
