@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 /**
   * Class to Build a Eigth-Puzzle with a determined String input
   * @author: Joao Castro
@@ -195,5 +197,19 @@ class Puzzle {
 		// System.out.println();
 		// System.out.println();
 		// System.out.println(d);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Puzzle puzzle1 = (Puzzle) o;
+		return puzzle.equals(puzzle1.puzzle) &&
+				Objects.equals(isValidPuzzle, puzzle1.isValidPuzzle);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(puzzle);
 	}
 }
