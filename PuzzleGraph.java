@@ -227,8 +227,31 @@ class PuzzleGraph{
 		return DFS(p, new HashSet<>());
 	}
 
+	public List<Puzzle> BFS2(Puzzle p) throws Exception {
+		Set<Puzzle> alreadyVisited = new HashSet<>();
+		Queue<Puzzle> queue = new LinkedList<Puzzle>();
+		queue.add(p);
+		alreadyVisited.add(p);
 
-		/**/
+		while (!queue.isEmpty()) {
+			Puzzle puzzle = queue.remove();
+			if (puzzle.puzzle.equals("123456780")) {
+				return new ArrayList<Puzzle>();
+			}
+			for (Puzzle newPuzzle : puzzle.getPuzzleStates(puzzle)){
+				if (!alreadyVisited.contains(newPuzzle)) {
+					queue.add(newPuzzle);
+					alreadyVisited.add(newPuzzle);
+				}
+			}
+		}
+
+		throw new Exception("aaa?");
+	}
+
+
+
+	/**/
 
 	public Vertex printSolutionPath(Vertex v){
 		Vertex resp;
@@ -261,7 +284,7 @@ class PuzzleGraph{
 			PuzzleGraph graph = new PuzzleGraph();
 			if (p.isValidPuzzle){
 				Vertex v = graph.addVertex(p);
-				List<Puzzle> puzzles = graph.DFS(v.p);
+				List<Puzzle> puzzles = graph.BFS2(v.p);
 				for (Puzzle puzzle : puzzles) {
 					System.out.println(puzzle.puzzle);
 				}
