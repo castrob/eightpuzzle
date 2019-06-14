@@ -1,4 +1,9 @@
-import java.util.Objects;
+//Algoritmos de Busca
+//		Ana Leticia Viana
+//		Augusto Noronha
+//		Cora Silberschneider
+//		Joao Castro
+
 
 /**
   * Class to Build a Eigth-Puzzle with a determined String input
@@ -141,7 +146,10 @@ class Puzzle implements Comparable<Puzzle> {
 				 states[0] = p.swapElements(3,0);
 				 states[1] = p.swapElements(3,4);
 				 states[2] = p.swapElements(3,6);
-				break;
+				 states[0].level = nextLevel;
+				 states[1].level = nextLevel;
+				 states[2].level = nextLevel;
+				 break;
 				case 4: 
 				 states = new Puzzle[4];
 				 states[0] = p.swapElements(4,1);
@@ -228,14 +236,14 @@ class Puzzle implements Comparable<Puzzle> {
 		return value;
 	}
 
+	// valor de f é a distância até a raíz + distância de Manhattan
 	public int getFScore(){
 		return this.level + this.heuristic();
 	}
-	
+
+	// Funções de ordenação utilizam essa função como critério (importante para o A*)
 	@Override
 	public int compareTo(Puzzle p) {
 		return this.getFScore() - p.getFScore();
 	}
-
-
 }
